@@ -11,7 +11,7 @@ import Nav from './components/Nav'
 import data from './data'
 
 //Import util.js
-import util from './util'
+import { playAudio } from './util'
 
 //Main function
 function App() {
@@ -43,13 +43,24 @@ function App() {
     setSongInfo({ ...songInfo, currentTime: current, duration, animationPercentage });
   }
 
+  const songEndHandler = async () => {
+    //Find current song
+    let currentIndex = songs.findIndex((s) => s.id === currentSong.id);
+    //Skip track
+    currentIndex++;
+    await setCurrentSong(songs[(currentIndex < songs.length ? currentIndex : 0)]);
+    //Play if it's playing
+    playAudio(isPlaying, audioRef);
+  }
+
+
   return (
     <div className="App">
       <Nav libraryStatus={libraryStatus} setLibraryStatus={setLibraryStatus} />
       <Song currentSong={currentSong} />
       <Player songs={songs} setSongs={setSongs} isPlaying={isPlaying} setIsPlaying={setIsPlaying} currentSong={currentSong} setCurrentSong={setCurrentSong} songInfo={songInfo} setSongInfo={setSongInfo} audioRef={audioRef} />
       <Library libraryStatus={libraryStatus} songs={songs} setSongs={setSongs} currentSong={currentSong} setCurrentSong={setCurrentSong} isPlaying={isPlaying} audioRef={audioRef} setSongInfo={setSongInfo} songInfo={songInfo} />
-      <audio onTimeUpdate={timeUpdateHandler} onLoadedMetadata={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
+      <audio onEnded={songEndHandler} onTimeUpdate={timeUpdateHandler} onLoadedMetadata={timeUpdateHandler} ref={audioRef} src={currentSong.audio}></audio>
     </div>
   );
 }
