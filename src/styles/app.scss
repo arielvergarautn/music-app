@@ -43,15 +43,7 @@ body{
     font-family: 'Lato', sans-serif;
 }
 
-input[type=range].onoff::-webkit-slider-thumb {
-    -webkit-appearance: none;
-}
-input[type=range].onoff::-moz-slider-thumb {
-    -moz-appearance: none;
-}
-input[type=range].onoff::slider-thumb {
-    appearance: none;
-}
+
 
 .App{
      transition: all 0.5s ease;
